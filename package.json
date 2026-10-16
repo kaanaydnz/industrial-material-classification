@@ -18,8 +18,10 @@
     "ag-grid-community": "^33.0.0",
     "ag-grid-react": "^33.0.0",
     "echarts": "^5",
+    "i18next": "^26.4.7",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "react-i18next": "^17.0.19",
     "react-router-dom": "^7.17.0"
   },
   "devDependencies": {

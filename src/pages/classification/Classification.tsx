@@ -13,7 +13,7 @@ import { AgGridReact } from 'ag-grid-react';
 import * as ag from 'ag-grid-community';
 import { getIxTheme } from '@siemens/ix-aggrid';
 import { buildChartOptions, CHART_SCATTER_DATA } from '../../shared';
-import styles from './Charts.module.css';
+import styles from './Classification.module.css';
 
 registerTheme(echarts);
 
@@ -46,7 +46,7 @@ function initChart(el: HTMLDivElement, instanceRef: MutableRefObject<echarts.ECh
   instanceRef.current.setOption(buildChartOptions());
 }
 
-function Charts() {
+function Classification() {
   const chartRef = useRef<HTMLDivElement>(null);
   const instanceRef = useRef<echarts.ECharts | null>(null);
   const [showTable, setShowTable] = useState(false);
@@ -96,7 +96,7 @@ function Charts() {
   return (
     <div className={styles.chartsPage}>
       <div className={styles.pageHeader}>
-        <IxContentHeader headerTitle="Charts" />
+        <IxContentHeader headerTitle="Classification" />
         <IxButton
           variant="secondary"
           aria-label={showTable ? 'Show as chart' : 'Show as data table'}
@@ -145,4 +145,4 @@ function Charts() {
   );
 }
 
-export default Charts;
+export default Classification;

@@ -5,9 +5,9 @@
 
 import { useNavigate } from 'react-router-dom';
 import { IxTypography, IxLinkButton, IxContentHeader } from '@siemens/ix-react';
-import styles from './GetStarted.module.css';
+import styles from './Dashboard.module.css';
 
-function GetStarted() {
+function Dashboard() {
   const navigate = useNavigate();
 
   return (
@@ -51,4 +51,4 @@ function GetStarted() {
   );
 }
 
-export default GetStarted;
+export default Dashboard;

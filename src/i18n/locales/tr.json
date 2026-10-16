@@ -1,0 +1,12 @@
+{
+    "app": {
+        "name": "Endüstriyel Malzeme Sınıflandırma"
+    },
+    "navigation": {
+        "dashboard": "Kontrol Paneli",
+        "projects": "Projeler",
+        "classification": "Malzeme Sınıflandırma",
+        "history": "Sınıflandırma Geçmişi"
+        
+    }
+}

@@ -8,14 +8,14 @@ import { AgGridReact } from 'ag-grid-react';
 import * as ag from 'ag-grid-community';
 import { getIxTheme } from '@siemens/ix-aggrid';
 import { GRID_ROW_DATA, GRID_COL_DEFS } from '../../shared';
-import styles from './Grids.module.css';
+import styles from './History.module.css';
 
 const ixTheme = getIxTheme(ag);
 
-function Grids() {
+function History() {
   return (
     <>
-      <IxContentHeader headerTitle="Grids" />
+      <IxContentHeader headerTitle="History" />
       <IxTypography format="body" className={styles.description}>
         Siemens Industrial Experience integrates the data grid library{' '}
         <a
@@ -45,4 +45,4 @@ function Grids() {
   );
 }
 
-export default Grids;
+export default History;

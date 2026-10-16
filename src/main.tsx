@@ -18,6 +18,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 import App from './App';
+import './i18n';
 
 import '@siemens/ix/dist/siemens-ix/siemens-ix.css';
 

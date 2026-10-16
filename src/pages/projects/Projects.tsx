@@ -16,10 +16,10 @@ import {
   IxTypography,
   showMessage,
 } from '@siemens/ix-react';
-import styles from './Forms.module.css';
+import styles from './Projects.module.css';
 import { iconQuestion } from '@siemens/ix-icons/icons';
 
-function Forms() {
+function Projects() {
   const [inspectorName, setInspectorName] = useState('');
   const [inspectionType, setInspectionType] = useState('');
   const [inspectionDate, setInspectionDate] = useState('');
@@ -40,7 +40,7 @@ function Forms() {
 
   return (
     <>
-      <IxContentHeader headerTitle="Forms" />
+      <IxContentHeader headerTitle="Projects" />
       <IxTypography format="body" className={styles.description}>
         Siemens Industrial Experience provides consistent form elements for collecting and
         validating user input.
@@ -105,4 +105,4 @@ function Forms() {
   );
 }
 
-export default Forms;
+export default Projects;

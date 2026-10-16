@@ -1,0 +1,11 @@
+{
+    "app": {
+        "name": "Industrial Material Classification"
+    },
+    "navigation": {
+        "dashboard": "Dashboard",
+        "projects": "Projects",
+        "classification": "Material Classification",
+        "history": "Classification History"
+    }
+}

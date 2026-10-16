@@ -7,19 +7,18 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import {
   IxApplication,
   IxApplicationHeader,
-  IxAvatar,
   IxMenu,
   IxMenuItem,
   IxContent,
 } from '@siemens/ix-react';
-import { CompanyLogo } from './components/CompanyLogo';
 
-import GetStarted from './pages/get-started/GetStarted';
-import Forms from './pages/forms/Forms';
-import Charts from './pages/charts/Charts';
-import Grids from './pages/grids/Grids';
+import Dashboard from './pages/dashboard/Dashboard';
+import Projects from './pages/projects/Projects';
+import Classification from './pages/classification/Classification';
+import History from './pages/history/History';
 import './App.css';
-import { iconHome, iconPiechart, iconTable, iconTextDocument } from '@siemens/ix-icons/icons';
+import { iconDashboard, iconProject, iconLayers, iconHistory, iconGlobe } from '@siemens/ix-icons/icons';
+import { useTranslation } from 'react-i18next';
 
 function App() {
   const navigate = useNavigate();
@@ -27,67 +26,76 @@ function App() {
 
   const isActive = (path: string): boolean => location.pathname === path;
 
+  const { t, i18n } = useTranslation();
   return (
     <>
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
       <IxApplication>
-        <IxApplicationHeader name="Siemens Industrial Experience Starter App">
-          <CompanyLogo />
-          <IxAvatar initials="JD" aria-label="User avatar: JD" />
+        <IxApplicationHeader
+          name={t('app.name')} >
         </IxApplicationHeader>
 
         <IxMenu enableToggleTheme aria-label="Main navigation">
           <IxMenuItem
-            icon={iconHome}
+            icon={iconDashboard}
             active={isActive('/')}
             onClick={e => {
               e.preventDefault();
               navigate('/');
             }}
           >
-            Get Started
+            {t('navigation.dashboard')}
           </IxMenuItem>
           <IxMenuItem
-            icon={iconTextDocument}
-            active={isActive('/forms')}
+            icon={iconProject}
+            active={isActive('/projects')}
             onClick={e => {
               e.preventDefault();
-              navigate('/forms');
+              navigate('/projects');
             }}
           >
-            Forms
+            {t('navigation.projects')}
           </IxMenuItem>
           <IxMenuItem
-            icon={iconPiechart}
-            active={isActive('/charts')}
+            icon={iconLayers}
+            active={isActive('/classification')}
             onClick={e => {
               e.preventDefault();
-              navigate('/charts');
+              navigate('/classification');
             }}
           >
-            Charts
+            {t('navigation.classification')}
           </IxMenuItem>
           <IxMenuItem
-            icon={iconTable}
-            active={isActive('/grids')}
+            icon={iconHistory}
+            active={isActive('/history')}
             onClick={e => {
               e.preventDefault();
-              navigate('/grids');
+              navigate('/history');
             }}
           >
-            Grids
+            {t('navigation.history')}
+          </IxMenuItem>
+          <IxMenuItem
+            slot="bottom"
+            icon={iconGlobe}
+            onClick={() =>
+              i18n.changeLanguage(i18n.language === 'en' ? 'tr' : 'en')
+            }
+          >
+            {i18n.language === 'en' ? 'Türkçe' : 'English'}
           </IxMenuItem>
         </IxMenu>
 
         <IxContent id="main-content">
           <Routes>
-            <Route path="/" element={<GetStarted />} />
-            <Route path="/forms" element={<Forms />} />
-            <Route path="/charts" element={<Charts />} />
-            <Route path="/grids" element={<Grids />} />
-            <Route path="*" element={<GetStarted />} />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/classification" element={<Classification />} />
+            <Route path="/history" element={<History />} />
+            <Route path="*" element={<Dashboard />} />
           </Routes>
         </IxContent>
       </IxApplication>
