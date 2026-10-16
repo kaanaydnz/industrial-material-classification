@@ -16,6 +16,7 @@ import Dashboard from './pages/dashboard/Dashboard';
 import Projects from './pages/projects/Projects';
 import Classification from './pages/classification/Classification';
 import History from './pages/history/History';
+import { useEffect } from 'react';
 import './App.css';
 import { iconDashboard, iconProject, iconLayers, iconHistory, iconGlobe } from '@siemens/ix-icons/icons';
 import { useTranslation } from 'react-i18next';
@@ -23,10 +24,33 @@ import { useTranslation } from 'react-i18next';
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
-
   const isActive = (path: string): boolean => location.pathname === path;
-
   const { t, i18n } = useTranslation();
+
+  // Save theme
+  useEffect(() => {
+    const root = document.documentElement;
+    const savedTheme = localStorage.getItem('theme');
+
+    if (savedTheme === 'light' || savedTheme === 'dark') {
+      root.setAttribute('data-ix-color-schema', savedTheme);
+    }
+
+    const observer = new MutationObserver(() => {
+      const theme = root.getAttribute('data-ix-color-schema');
+
+      if (theme === 'light' || theme === 'dark') {
+        localStorage.setItem('theme', theme);
+      }
+    });
+
+    observer.observe(root, {
+      attributes: true,
+      attributeFilter: ['data-ix-color-schema'],
+    });
+
+    return () => observer.disconnect();
+  }, []);
   return (
     <>
       <a href="#main-content" className="skip-link">
@@ -81,9 +105,11 @@ function App() {
           <IxMenuItem
             slot="bottom"
             icon={iconGlobe}
-            onClick={() =>
-              i18n.changeLanguage(i18n.language === 'en' ? 'tr' : 'en')
-            }
+            onClick={() => {
+              const language = i18n.language === 'en' ? 'tr' : 'en';
+              i18n.changeLanguage(language);
+              localStorage.setItem('language', language);
+            }}
           >
             {i18n.language === 'en' ? 'Türkçe' : 'English'}
           </IxMenuItem>

@@ -7,5 +7,21 @@
         "projects": "Projects",
         "classification": "Material Classification",
         "history": "Classification History"
+    },
+    "projects": {
+        "title": "Projects",
+        "materials": "Materials",
+        "searchPlaceholder": "Search materials...",
+        "loading": "Loading materials...",
+        "searching": "Searching...",
+        "empty": "No materials found.",
+        "error": "Failed to load materials. Please try again.",
+        "retry": "Retry",
+        "materialNumber": "Material Number",
+        "name": "Name",
+        "category": "Category",
+        "materialType": "Material Type",
+        "status": "Status",
+        "updatedAt": "Last Updated"
     }
 }

@@ -3,104 +3,101 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { useState } from 'react';
-import {
-  IxInput,
-  IxSelect,
-  IxSelectItem,
-  IxDateInput,
-  IxRadioGroup,
-  IxRadio,
-  IxButton,
-  IxContentHeader,
-  IxTypography,
-  showMessage,
-} from '@siemens/ix-react';
+import { useEffect, useState } from 'react';
+import { IxContentHeader, IxMessageBar, IxButton, IxInput, IxIcon } from '@siemens/ix-react';
+import { AgGridReact } from 'ag-grid-react';
+import type { ColDef } from 'ag-grid-community';
+import { getMaterials } from '../../services/mockApi';
+import type { Material } from '../../types/material';
+import { iconSearch } from '@siemens/ix-icons/icons';
+import { getIxTheme } from '@siemens/ix-aggrid';
+import { useTranslation } from 'react-i18next';
+import * as agGrid from 'ag-grid-community';
 import styles from './Projects.module.css';
-import { iconQuestion } from '@siemens/ix-icons/icons';
+
+const ixTheme = getIxTheme(agGrid, {
+  stripedRows: true,
+});
 
 function Projects() {
-  const [inspectorName, setInspectorName] = useState('');
-  const [inspectionType, setInspectionType] = useState('');
-  const [inspectionDate, setInspectionDate] = useState('');
-  const [inspectionMode, setInspectionMode] = useState('inline');
+  const { t } = useTranslation();
+  const [materials, setMaterials] = useState<Material[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const columnDefs: ColDef<Material>[] = [
+    { field: 'materialNumber', headerName: t('projects.materialNumber') },
+    { field: 'name', headerName: t('projects.name') },
+    { field: 'category', headerName: t('projects.category') },
+    { field: 'materialType', headerName: t('projects.materialType') },
+    { field: 'status', headerName: t('projects.status') },
+    { field: 'updatedAt', headerName: t('projects.updatedAt') },
+  ];
 
-  const handleSave = async () => {
-    await showMessage({
-      messageTitle: 'Confirm inspection assignment?',
-      message: 'The inspection will be assigned and a notification will be sent to the inspector.',
-      icon: iconQuestion,
-      centered: true,
-      actions: [
-        { id: 'cancel', text: 'Cancel', type: 'cancel' },
-        { id: 'ok', text: 'Confirm', type: 'okay' },
-      ],
-    });
-  };
+  async function loadMaterials() {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const result = await getMaterials({ search });
+      setMaterials(result);
+      setHasLoaded(true);
+    } catch {
+      setError(t('projects.error'));
+    } finally {
+      setIsLoading(false);
+    }
+  }
+  useEffect(() => {
+
+    loadMaterials();
+  }, [search]);
 
   return (
     <>
-      <IxContentHeader headerTitle="Projects" />
-      <IxTypography format="body" className={styles.description}>
-        Siemens Industrial Experience provides consistent form elements for collecting and
-        validating user input.
-      </IxTypography>
+      <IxContentHeader headerTitle={t('projects.title')} />
 
-      <form
-        className={styles.formContainer}
-        aria-label="Inspection assignment form"
-        onSubmit={e => e.preventDefault()}
-      >
-        <IxInput
-          label="Inspector Name"
-          placeholder="Jane Doe"
-          helperText="Enter the certified inspector's full name"
-          value={inspectorName}
-          onValueChange={e => setInspectorName(e.detail)}
-        />
+      <div className={styles.materialList}>
 
-        <IxSelect
-          label="Inspection Type"
-          helperText="Choose the inspection to perform"
-          value={inspectionType}
-          onValueChange={e => setInspectionType(e.detail as string)}
-        >
-          <IxSelectItem value="Visual Inspection" label="Visual Inspection" />
-          <IxSelectItem value="Dimensional Check" label="Dimensional Check" />
-          <IxSelectItem value="Functional Test" label="Functional Test" />
-          <IxSelectItem value="Safety Audit" label="Safety Audit" />
-          <IxSelectItem value="Pressure Test" label="Pressure Test" />
-          <IxSelectItem value="Material Analysis" label="Material Analysis" />
-          <IxSelectItem value="Electrical Test" label="Electrical Test" />
-          <IxSelectItem value="Thermal Imaging" label="Thermal Imaging" />
-          <IxSelectItem value="Calibration Check" label="Calibration Check" />
-        </IxSelect>
-
-        <IxDateInput
-          label="Inspection Date"
-          helperText="Schedule the inspection"
-          placeholder="DD/MM/YYYY"
-          format="dd/MM/yyyy"
-          value={inspectionDate}
-          onValueChange={e => setInspectionDate(e.detail as string)}
-        />
-
-        <IxRadioGroup
-          label="Inspection Mode"
-          helperText="In-line inspection takes place during production. Offline sampling requires batch removal for lab testing."
-          value={inspectionMode}
-          onValueChange={e => setInspectionMode(e.detail as string)}
-        >
-          <IxRadio value="inline" label="In-line inspection" />
-          <IxRadio value="offline" label="Offline sampling" />
-        </IxRadioGroup>
-
-        <div className={styles.buttonRow}>
-          <IxButton variant="primary" aria-label="Save inspection assignment" onClick={handleSave}>
-            {'Save'}
-          </IxButton>
+        <div className={styles.searchContainer}>
+          <IxIcon name={iconSearch} size="20" />
+          <IxInput
+            placeholder={t('projects.searchPlaceholder')}
+            value={search}
+            onValueChange={(event) => setSearch(event.detail)}
+          />
         </div>
-      </form>
+
+        <div className={styles.searchingContainer}>
+          {isLoading && hasLoaded && (
+            <p className={styles.searching}>{t('projects.searching')}</p>
+          )}
+        </div>
+
+        {isLoading && !hasLoaded ? (
+          <p>{t('projects.loading')}</p>
+        ) : error ? (
+          <IxMessageBar persistent type="warning">
+            <div className="message-bar-warning">
+              {error}
+              <IxButton onClick={() => loadMaterials()}
+              >{t('projects.retry')}</IxButton>
+            </div>
+          </IxMessageBar>
+        ) : materials.length === 0 && !isLoading ? (
+          <p>{t('projects.empty')}</p>
+        ) : (
+          <div className={styles.materialGrid}>
+            <AgGridReact<Material>
+              rowData={materials}
+              columnDefs={columnDefs}
+              theme={ixTheme}
+            />
+          </div>
+        )}
+      </div>
+
     </>
   );
 }

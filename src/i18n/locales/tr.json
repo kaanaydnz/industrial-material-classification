@@ -7,6 +7,21 @@
         "projects": "Projeler",
         "classification": "Malzeme Sınıflandırma",
         "history": "Sınıflandırma Geçmişi"
-        
+    },
+    "projects": {
+        "title": "Projeler",
+        "materials": "Malzemeler",
+        "searchPlaceholder": "Malzeme ara...",
+        "loading": "Malzemeler yükleniyor...",
+        "searching": "Aranıyor...",
+        "empty": "Malzeme bulunamadı.",
+        "error": "Malzemeler yüklenemedi. Lütfen tekrar deneyin.",
+        "retry": "Tekrar dene",
+        "materialNumber": "Malzeme Numarası",
+        "name": "Ad",
+        "category": "Kategori",
+        "materialType": "Malzeme Türü",
+        "status": "Durum",
+        "updatedAt": "Son Güncelleme"
     }
 }

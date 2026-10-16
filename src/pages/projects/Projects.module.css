@@ -22,3 +22,34 @@
   margin-top: 0.5rem;
   justify-content: flex-end;
 }
+
+.searchContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 1rem;
+}
+
+.materialList {
+  margin-top: 1.5rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.materialGrid {
+  width: min(100%, 75rem);
+  min-width: 0;
+  height: clamp(280px, 55vh, 600px);
+}
+
+.searchingContainer {
+  height: 1.5rem;
+}
+
+.searching {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--theme-color-std-text);
+}
