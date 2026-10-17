@@ -5,8 +5,18 @@ export type ClassificationStatus =
     | 'in-review'
     | 'confirmed';
 
+export interface Project {
+    id: string;
+    projectNumber: string;
+    name: string;
+    description: string;
+    status: 'active' | 'completed';
+    updatedAt: string;
+}
+
 export interface Material {
     id: string;
+    projectId: string;
     materialNumber: string;
     name: string;
     description: string;

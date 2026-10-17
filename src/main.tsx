@@ -19,6 +19,7 @@ import ReactDOM from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 import App from './App';
 import './i18n';
+import { IxApplicationContext } from '@siemens/ix-react';
 
 import '@siemens/ix/dist/siemens-ix/siemens-ix.css';
 
@@ -35,8 +36,10 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <HashRouter>
-      <App />
-    </HashRouter>
+    <IxApplicationContext>
+      <HashRouter>
+        <App />
+      </HashRouter>
+    </IxApplicationContext>
   </React.StrictMode>,
 );

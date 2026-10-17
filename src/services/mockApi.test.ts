@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { getMaterials, getMaterialById } from './mockApi';
+import {
+    getMaterials,
+    getMaterialById,
+    getProjects,
+    getProjectById,
+} from './mockApi';
 
 describe('mockApi', () => {
     it('returns materials', async () => {
@@ -14,9 +19,27 @@ describe('mockApi', () => {
         expect(material?.name).toBe('Hex Bolt M12');
     });
 
-    it('returns undefined for an unknown ID', async () => {
+    it('returns undefined for an unknown material ID', async () => {
         const material = await getMaterialById('UNKNOWN');
 
         expect(material).toBeUndefined();
+    });
+
+    it('returns projects', async () => {
+        const projects = await getProjects();
+
+        expect(projects).toHaveLength(2);
+    });
+
+    it('finds a project by ID', async () => {
+        const project = await getProjectById('PRJ-1001');
+
+        expect(project?.name).toBe('Mechanical Components');
+    });
+
+    it('returns undefined for an unknown project ID', async () => {
+        const project = await getProjectById('UNKNOWN');
+
+        expect(project).toBeUndefined();
     });
 });

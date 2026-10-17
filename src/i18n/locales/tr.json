@@ -23,6 +23,18 @@
         "materialType": "Malzeme Türü",
         "status": "Durum",
         "updatedAt": "Son Güncelleme",
+        "columns": {
+            "projectNumber": "Proje Numarası",
+            "projectName": "Proje Adı",
+            "description": "Açıklama",
+            "status": "Durum",
+            "lastUpdated": "Son Güncelleme"
+        },
+        "statuses": {
+            "active": "Aktif",
+            "completed": "Tamamlandı",
+            "draft": "Taslak"
+        },
         "statusValues": {
             "unclassified": "Sınıflandırılmadı",
             "draft": "Taslak",

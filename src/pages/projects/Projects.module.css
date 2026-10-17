@@ -19,7 +19,7 @@
   padding-inline-start: 0.25rem;
 }
 
-.materialGrid {
+.projectsGrid {
   width: min(100%, 75rem);
   min-width: 0;
   height: clamp(280px, 55vh, 600px);

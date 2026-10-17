@@ -23,6 +23,18 @@
         "materialType": "Material Type",
         "status": "Status",
         "updatedAt": "Last Updated",
+        "columns": {
+            "projectNumber": "Project Number",
+            "projectName": "Project Name",
+            "description": "Description",
+            "status": "Status",
+            "lastUpdated": "Last Updated"
+        },
+        "statuses": {
+            "active": "Active",
+            "completed": "Completed",
+            "draft": "Draft"
+        },
         "statusValues": {
             "unclassified": "Unclassified",
             "draft": "Draft",

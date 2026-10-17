@@ -9,12 +9,15 @@ import {
   IxMessageBar,
   IxButton,
   IxInput,
-  IxIcon
+  IxIcon,
 } from '@siemens/ix-react';
 import { AgGridReact } from 'ag-grid-react';
 import type { ColDef } from 'ag-grid-community';
-import { getMaterials } from '../../services/mockApi';
-import type { Material } from '../../types/material';
+import {
+  getProjects,
+  getMaterialsByProjectId,
+} from '../../services/mockApi';
+import type { Material, Project } from '../../types/material';
 import { iconSearch } from '@siemens/ix-icons/icons';
 import { getIxTheme } from '@siemens/ix-aggrid';
 import { useTranslation } from 'react-i18next';
@@ -25,56 +28,72 @@ const ixTheme = getIxTheme(agGrid, {
   stripedRows: true,
 });
 
+
 function Projects() {
   const { t, i18n } = useTranslation();
-  const [materials, setMaterials] = useState<Material[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [hasLoaded, setHasLoaded] = useState(false);
-  const columnDefs: ColDef<Material>[] = [
-    { field: 'materialNumber', headerName: t('projects.materialNumber') },
-    { field: 'name', headerName: t('projects.name') },
+  const columnDefs: ColDef<Project>[] = [
     {
-      field: 'category',
-      headerName: t('projects.category'),
-      valueFormatter: (params) => t(`projects.categories.${params.value}`)
-
+      field: 'projectNumber',
+      headerName: t('projects.columns.projectNumber'),
+      flex: 1,
     },
     {
-      field: 'materialType',
-      headerName: t('projects.materialType'),
-      valueFormatter: (params) => t(`projects.materialTypes.${params.value}`)
+      field: 'name',
+      headerName: t('projects.columns.projectName'),
+      flex: 1,
+    },
+    {
+      field: 'description',
+      headerName: t('projects.columns.description'),
+      flex: 2,
+      minWidth: 300,
     },
     {
       field: 'status',
-      headerName: t('projects.status'),
-      valueFormatter: (params) => t(`projects.statusValues.${params.value}`)
+      headerName: t('projects.columns.status'),
+      flex: 1,
+      valueFormatter: (params) =>
+        params.value
+          ? t(`projects.statuses.${String(params.value).toLowerCase()}`)
+          : '',
     },
     {
       field: 'updatedAt',
-      headerName: t('projects.updatedAt'),
+      headerName: t('projects.columns.lastUpdated'),
+      flex: 1,
       valueFormatter: (params) => {
         if (!params.value) return '';
 
         return new Intl.DateTimeFormat(
-          i18n.language === 'tr' ? 'tr-TR' : 'en-GB',
-          {
-            dateStyle: 'medium',
-            timeStyle: 'short',
-          },
+          i18n.language.startsWith('tr') ? 'tr-TR' : 'en-GB',
+          { dateStyle: 'medium', timeStyle: 'short' },
         ).format(new Date(params.value));
       },
     },
   ];
 
-  async function loadMaterials() {
+  async function loadProjects() {
     setIsLoading(true);
     setError(null);
 
     try {
-      const result = await getMaterials({ search });
-      setMaterials(result);
+      const result = await getProjects();
+      const query = search.trim().toLowerCase();
+
+      const filteredProjects = result.filter((project) =>
+        [
+          project.projectNumber,
+          project.name,
+          project.description,
+        ].some((value) => value.toLowerCase().includes(query)),
+      );
+
+      setProjects(filteredProjects);
       setHasLoaded(true);
     } catch {
       setError(t('projects.error'));
@@ -82,8 +101,9 @@ function Projects() {
       setIsLoading(false);
     }
   }
+
   useEffect(() => {
-    loadMaterials();
+    loadProjects();
   }, [search]);
 
   return (
@@ -115,16 +135,18 @@ function Projects() {
               {error}
               <IxButton
                 className={styles.retryButton}
-                onClick={() => loadMaterials()}
-              >{t('projects.retry')}</IxButton>
+                onClick={() => loadProjects()}
+              >
+                {t('projects.retry')}
+              </IxButton>
             </div>
           </IxMessageBar>
-        ) : materials.length === 0 && !isLoading ? (
+        ) : projects.length === 0 && !isLoading ? (
           <p>{t('projects.empty')}</p>
         ) : (
-          <div className={styles.materialGrid}>
-            <AgGridReact<Material>
-              rowData={materials}
+          <div className={styles.projectsGrid}>
+            <AgGridReact<Project>
+              rowData={projects}
               columnDefs={columnDefs}
               theme={ixTheme}
             />
