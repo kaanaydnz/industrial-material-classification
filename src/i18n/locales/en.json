@@ -22,6 +22,23 @@
         "category": "Category",
         "materialType": "Material Type",
         "status": "Status",
-        "updatedAt": "Last Updated"
+        "updatedAt": "Last Updated",
+        "statusValues": {
+            "unclassified": "Unclassified",
+            "draft": "Draft",
+            "in-review": "In Review",
+            "confirmed": "Confirmed"
+        },
+        "categories": {
+            "Fasteners": "Fasteners",
+            "Raw Materials": "Raw Materials",
+            "Electrical": "Electrical",
+            "Mechanical Components": "Mechanical Components"
+        },
+        "materialTypes": {
+            "Steel": "Steel",
+            "Copper": "Copper",
+            "Aluminium": "Aluminium"
+        }
     }
 }

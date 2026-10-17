@@ -20,7 +20,7 @@ const ixTheme = getIxTheme(agGrid, {
 });
 
 function Projects() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [materials, setMaterials] = useState<Material[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -29,10 +29,37 @@ function Projects() {
   const columnDefs: ColDef<Material>[] = [
     { field: 'materialNumber', headerName: t('projects.materialNumber') },
     { field: 'name', headerName: t('projects.name') },
-    { field: 'category', headerName: t('projects.category') },
-    { field: 'materialType', headerName: t('projects.materialType') },
-    { field: 'status', headerName: t('projects.status') },
-    { field: 'updatedAt', headerName: t('projects.updatedAt') },
+    {
+      field: 'category',
+      headerName: t('projects.category'),
+      valueFormatter: (params) => t(`projects.categories.${params.value}`)
+
+    },
+    {
+      field: 'materialType',
+      headerName: t('projects.materialType'),
+      valueFormatter: (params) => t(`projects.materialTypes.${params.value}`)
+    },
+    {
+      field: 'status',
+      headerName: t('projects.status'),
+      valueFormatter: (params) => t(`projects.statusValues.${params.value}`)
+    },
+    {
+      field: 'updatedAt',
+      headerName: t('projects.updatedAt'),
+      valueFormatter: (params) => {
+        if (!params.value) return '';
+
+        return new Intl.DateTimeFormat(
+          i18n.language === 'tr' ? 'tr-TR' : 'en-GB',
+          {
+            dateStyle: 'medium',
+            timeStyle: 'short',
+          },
+        ).format(new Date(params.value));
+      },
+    },
   ];
 
   async function loadMaterials() {

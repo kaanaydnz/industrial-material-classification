@@ -22,6 +22,23 @@
         "category": "Kategori",
         "materialType": "Malzeme Türü",
         "status": "Durum",
-        "updatedAt": "Son Güncelleme"
+        "updatedAt": "Son Güncelleme",
+        "statusValues": {
+            "unclassified": "Sınıflandırılmadı",
+            "draft": "Taslak",
+            "in-review": "İncelemede",
+            "confirmed": "Onaylandı"
+        },
+        "categories": {
+            "Fasteners": "Bağlantı Elemanları",
+            "Raw Materials": "Ham Maddeler",
+            "Electrical": "Elektrik",
+            "Mechanical Components": "Mekanik Bileşenler"
+        },
+        "materialTypes": {
+            "Steel": "Çelik",
+            "Copper": "Bakır",
+            "Aluminium": "Alüminyum"
+        }
     }
 }
