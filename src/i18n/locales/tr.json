@@ -40,5 +40,13 @@
             "Copper": "Bakır",
             "Aluminium": "Alüminyum"
         }
+    },
+    "classification": {
+        "title": "Malzeme Sınıflandırma Çalışma Alanı",
+        "loading": "Malzemeler yükleniyor...",
+        "empty": "Sınıflandırma için kullanılabilir malzeme bulunamadı.",
+        "error": "Malzemeler yüklenemedi. Lütfen tekrar deneyin.",
+        "retry": "Tekrar Dene",
+        "selectMaterial": "Malzeme seçin"
     }
 }

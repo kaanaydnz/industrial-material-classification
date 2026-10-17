@@ -4,7 +4,13 @@
  */
 
 import { useEffect, useState } from 'react';
-import { IxContentHeader, IxMessageBar, IxButton, IxInput, IxIcon } from '@siemens/ix-react';
+import {
+  IxContentHeader,
+  IxMessageBar,
+  IxButton,
+  IxInput,
+  IxIcon
+} from '@siemens/ix-react';
 import { AgGridReact } from 'ag-grid-react';
 import type { ColDef } from 'ag-grid-community';
 import { getMaterials } from '../../services/mockApi';
@@ -77,7 +83,6 @@ function Projects() {
     }
   }
   useEffect(() => {
-
     loadMaterials();
   }, [search]);
 
@@ -85,7 +90,7 @@ function Projects() {
     <>
       <IxContentHeader headerTitle={t('projects.title')} />
 
-      <div className={styles.materialList}>
+      <div className={styles.pageContent}>
 
         <div className={styles.searchContainer}>
           <IxIcon name={iconSearch} size="20" />
@@ -108,7 +113,9 @@ function Projects() {
           <IxMessageBar persistent type="warning">
             <div className="message-bar-warning">
               {error}
-              <IxButton onClick={() => loadMaterials()}
+              <IxButton
+                className={styles.retryButton}
+                onClick={() => loadMaterials()}
               >{t('projects.retry')}</IxButton>
             </div>
           </IxMessageBar>

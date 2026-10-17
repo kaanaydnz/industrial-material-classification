@@ -40,5 +40,13 @@
             "Copper": "Copper",
             "Aluminium": "Aluminium"
         }
+    },
+    "classification": {
+        "title": "Material Classification Workspace",
+        "loading": "Loading materials...",
+        "empty": "No materials available for classification.",
+        "error": "Failed to load materials. Please try again.",
+        "retry": "Retry",
+        "selectMaterial": "Select a material"
     }
 }

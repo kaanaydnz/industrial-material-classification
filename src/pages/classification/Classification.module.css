@@ -3,44 +3,30 @@
  * SPDX-License-Identifier: MIT
  */
 
-.chartsPage {
+.classificationPage {
   width: 100%;
 }
 
-.pageHeader {
+.classificationContent {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
   width: 100%;
-}
-
-.pageHeader ix-content-header {
-  flex: 1;
-}
-
-.description {
-  display: block;
+  max-width: 400px;
   margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  padding-inline-start: 0.25rem;
 }
 
-.chartTitle {
-  margin-bottom: 1rem;
-}
-
-.chartContainer {
+.selectorField {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
   width: 100%;
-  max-width: min(700px, 100%);
-  height: min(400px, 60vw);
-  margin: 0;
+  max-width: 400px;
 }
 
-.tableContainer {
-  width: 459px;
-  max-width: 100%;
-}
-
-.tableContainer :global(.ag-cell) {
-  padding: 8px;
-  line-height: 20px;
+.retryButton {
+  margin-inline-start: 0.5rem;
 }
