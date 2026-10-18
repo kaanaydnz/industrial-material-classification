@@ -9,7 +9,12 @@ import {
   IxSelect,
   IxSelectItem,
   IxMessageBar,
-  IxButton
+  IxButton,
+  IxLayoutGrid,
+  IxCol,
+  IxRow,
+  IxInput,
+  IxTextarea,
 } from '@siemens/ix-react';
 import type { Project } from '../../types/material';
 import { getProjects, getMaterialsByProjectId } from '../../services/mockApi';
@@ -32,6 +37,7 @@ function Classification() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [materials, setMaterials] = useState<Material[]>([]);
+  const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
   const [isLoadingMaterials, setIsLoadingMaterials] = useState(false);
   const [materialsError, setMaterialsError] = useState<string | null>(null);
   const columnDefs: ColDef<Material>[] = [
@@ -183,16 +189,86 @@ function Classification() {
         ) : materials.length === 0 ? (
           <p>{t('classification.projects.empty')}</p>
         ) : (
-          <div className={styles.materialsGrid}>
-            <AgGridReact<Material>
-              rowData={materials}
-              columnDefs={columnDefs}
-              theme={ixTheme}
-            />
-          </div>
+          <IxLayoutGrid noMargin style={{ "width": '100%' }}>
+            <IxRow>
+              <IxCol size="12" sizeLg="9">
+                <div className={styles.materialsGrid}>
+                  <AgGridReact<Material>
+                    rowData={materials}
+                    columnDefs={columnDefs}
+                    theme={ixTheme}
+                    onRowClicked={(event) => {
+                      setSelectedMaterial(event.data ?? null);
+                    }}
+                  />
+                </div>
+              </IxCol>
+              <IxCol size="12" sizeLg="3">
+                <section className={styles.editor}>
+                  <h3>{t('classification.editMaterial.title')}</h3>
+
+                  {selectedMaterial ? (
+                    <>
+                      <div className={styles.formField}>
+                        <label>{t('classification.editMaterial.materialNumber')}</label>
+                        <IxInput
+                          value={selectedMaterial.materialNumber}
+                          disabled
+                        />
+                      </div>
+
+                      <div className={styles.formField}>
+                        <label>{t('classification.editMaterial.name')}</label>
+                        <IxInput
+                          value={selectedMaterial.name}
+                          aria-label={t('classification.editMaterial.name')}
+                        />
+                      </div>
+
+                      <div className={styles.formField}>
+                        <label>{t('classification.editMaterial.category')}</label>
+                        <IxInput
+                          value={selectedMaterial.category}
+                          aria-label={t('classification.editMaterial.category')}
+                        />
+                      </div>
+
+                      <div className={styles.formField}>
+                        <label>{t('classification.editMaterial.type')}</label>
+                        <IxInput
+                          value={selectedMaterial.materialType}
+                          aria-label={t('classification.editMaterial.type')}
+                        />
+                      </div>
+
+                      <div className={styles.formField}>
+                        <label>{t('classification.editMaterial.description')}</label>
+                        <IxTextarea
+                          value={selectedMaterial.description}
+                          aria-label={t('classification.editMaterial.description')}
+                        />
+                      </div>
+
+                      <div className={styles.editorActions}>
+                        <IxButton variant="secondary">
+                          {t('classification.editMaterial.cancel')}
+                        </IxButton>
+
+                        <IxButton>
+                          {t('classification.editMaterial.saveDraft')}
+                        </IxButton>
+                      </div>
+                    </>
+                  ) : (
+                    <p>{t('classification.editMaterial.selectPrompt')}</p>
+                  )}
+                </section>
+              </IxCol>
+            </IxRow>
+          </IxLayoutGrid>
         )}
       </div>
-    </div>
+    </div >
   );
 }
 

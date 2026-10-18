@@ -63,6 +63,17 @@
             "type": "Type",
             "status": "Status",
             "updatedAt": "Updated At"
+        },
+        "editMaterial": {
+            "title": "Edit Material",
+            "selectPrompt": "Select a material from the table to view its details.",
+            "materialNumber": "Material Number",
+            "name": "Material Name",
+            "category": "Material Category",
+            "type": "Material Type",
+            "description": "Material Description",
+            "saveDraft": "Save Draft",
+            "cancel": "Cancel"
         }
     }
 }

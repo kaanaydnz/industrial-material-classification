@@ -10,7 +10,6 @@
 .classificationContent {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 1rem;
   width: 100%;
   margin-top: 1.5rem;
@@ -34,4 +33,39 @@
   width: min(100%, 100rem);
   min-width: 0;
   height: clamp(280px, 55vh, 600px);
+}
+
+.editor {
+  min-width: 0;
+  height: 100%;
+  padding: 1rem;
+  border: 1px solid var(--theme-color-soft-bdr);
+  border-radius: 0.5rem;
+  overflow-wrap: anywhere;
+  box-sizing: border-box;
+}
+
+.editor h3 {
+  margin-top: 0;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-bottom: 1rem;
+  min-width: 0;
+}
+
+.formField label {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.editorActions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
 }

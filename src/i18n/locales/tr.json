@@ -63,6 +63,17 @@
             "type": "Tür",
             "status": "Durum",
             "updatedAt": "Son Güncelleme"
+        },
+        "editMaterial": {
+            "title": "Malzemeyi Düzenle",
+            "selectPrompt": "Ayrıntılarını görüntülemek için tablodan bir malzeme seçin.",
+            "materialNumber": "Malzeme Numarası",
+            "name": "Malzeme Adı",
+            "category": "Malzeme Kategorisi",
+            "type": "Malzeme Türü",
+            "description": "Malzeme Açıklaması",
+            "saveDraft": "Taslağı Kaydet",
+            "cancel": "İptal"
         }
     }
 }
