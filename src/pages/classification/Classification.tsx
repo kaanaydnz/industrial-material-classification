@@ -31,6 +31,7 @@ import type { ColDef } from 'ag-grid-community';
 import type { Material } from '../../types/material';
 import { getIxTheme } from '@siemens/ix-aggrid';
 import * as agGrid from 'ag-grid-community';
+import ExcelJS from 'exceljs';
 
 const ixTheme = getIxTheme(agGrid, {
   stripedRows: true,
@@ -193,7 +194,6 @@ function Classification() {
     }
   }
 
-
   function handleCancel() {
     if (!selectedMaterial) return;
 
@@ -205,6 +205,89 @@ function Classification() {
       message: t('classification.editMaterial.changesDiscarded'),
       type: 'info',
     });
+  }
+
+  async function handleExportExcel() {
+    if (materials.length === 0) return;
+
+    try {
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('Materials');
+
+      worksheet.columns = [
+        { header: t('classification.materials.number'), key: 'materialNumber', width: 20 },
+        { header: t('classification.materials.name'), key: 'name', width: 28 },
+        { header: t('classification.materials.description'), key: 'description', width: 40 },
+        { header: t('classification.materials.category'), key: 'category', width: 22 },
+        { header: t('classification.materials.type'), key: 'materialType', width: 22 },
+        { header: t('classification.materials.status'), key: 'status', width: 18 },
+        { header: t('classification.materials.updatedAt'), key: 'updatedAt', width: 24 },
+      ];
+
+      materials.forEach((material) => {
+        worksheet.addRow({
+          materialNumber: material.materialNumber,
+          name: material.name,
+          description: material.description,
+          category: material.category,
+          materialType: material.materialType,
+          status: material.status
+            ? t(`projects.statusValues.${material.status}`)
+            : '',
+          updatedAt: material.updatedAt
+            ? new Intl.DateTimeFormat(
+              i18n.language.startsWith('tr') ? 'tr-TR' : 'en-GB',
+              { dateStyle: 'medium', timeStyle: 'short' },
+            ).format(new Date(material.updatedAt))
+            : '',
+        });
+      });
+
+      const headerRow = worksheet.getRow(1);
+      headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+      headerRow.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FF008A95' },
+      };
+      headerRow.alignment = { vertical: 'middle' };
+
+      worksheet.views = [{ state: 'frozen', ySplit: 1 }];
+      worksheet.autoFilter = {
+        from: 'A1',
+        to: `G${materials.length + 1}`,
+      };
+
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([new Uint8Array(buffer)], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      const project = projects.find((item) => item.id === selectedId);
+      const filename = (project?.projectNumber ?? 'materials')
+        .replace(/[^a-zA-Z0-9_-]/g, '_');
+
+      link.href = url;
+      link.download = `${filename}-materials.xlsx`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+
+      showToast({
+        message: t('classification.exportExcelSuccess'),
+        type: 'success',
+      });
+    } catch (error) {
+      console.error('Excel export failed:', error);
+
+      showToast({
+        message: t('classification.exportExcelError'),
+        type: 'error',
+      });
+    }
   }
 
   return (
@@ -252,6 +335,11 @@ function Classification() {
                 />
               ))}
             </IxSelect>
+            <div className={styles.materialsToolbar}>
+              <IxButton onClick={handleExportExcel}>
+                {t('classification.exportExcel')}
+              </IxButton>
+            </div>
           </div>
         )}
         {!selectedId ? null : isLoadingMaterials ? (
@@ -268,6 +356,7 @@ function Classification() {
           <IxLayoutGrid noMargin>
             <IxRow>
               <IxCol size="12" sizeLg="9">
+
 
 
                 <div className={styles.materialsGrid}>

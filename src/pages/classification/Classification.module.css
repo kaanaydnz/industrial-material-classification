@@ -73,3 +73,20 @@
   gap: 0.5rem;
   margin-top: 1.5rem;
 }
+
+.materialsToolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.classificationContent ix-col {
+  padding-inline: 0;
+  margin-inline: 0;
+}
+
+@media (min-width: 80em) {
+  .classificationContent ix-col+ix-col {
+    padding-inline-start: 1.5rem;
+  }
+}

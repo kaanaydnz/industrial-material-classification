@@ -49,6 +49,9 @@
     },
     "classification": {
         "title": "Material Classification Workspace",
+        "exportExcel": "Export to Excel",
+        "exportExcelSuccess": "Excel file exported successfully.",
+        "exportExcelError": "Failed to export the Excel file.",
         "projects": {
             "loading": "Loading projects...",
             "empty": "No projects available for classification.",

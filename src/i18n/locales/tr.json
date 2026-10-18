@@ -49,6 +49,9 @@
     },
     "classification": {
         "title": "Malzeme Sınıflandırma Çalışma Alanı",
+        "exportExcel": "Excel'e Aktar",
+        "exportExcelSuccess": "Excel dosyası başarıyla dışa aktarıldı.",
+        "exportExcelError": "Excel dosyası dışa aktarılamadı.",
         "projects": {
             "loading": "Projeler yükleniyor...",
             "empty": "Sınıflandırma için kullanılabilir proje bulunamadı.",
