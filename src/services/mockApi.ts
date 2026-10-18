@@ -1,8 +1,34 @@
+
 import type {
     Material,
     MaterialFilters,
     Project,
+    ClassificationHistoryEntry,
+    ClassificationFieldChange,
 } from '../types/material';
+
+const STORAGE_KEYS = {
+    materials: 'industrial-classification-materials',
+    drafts: 'industrial-classification-drafts',
+    history: 'industrial-classification-history',
+} as const;
+
+function readStoredData<T>(key: string, fallback: T): T {
+    try {
+        const stored = localStorage.getItem(key);
+        return stored ? (JSON.parse(stored) as T) : fallback;
+    } catch {
+        return fallback;
+    }
+}
+
+function persistData<T>(key: string, data: T): void {
+    try {
+        localStorage.setItem(key, JSON.stringify(data));
+    } catch (error) {
+        console.error(`Failed to persist ${key}:`, error);
+    }
+}
 
 const projects: Project[] = [
     {
@@ -23,7 +49,7 @@ const projects: Project[] = [
     },
 ];
 
-const materials: Material[] = [
+const initialMaterials: Material[] = [
     {
         id: 'MAT-1001',
         projectId: 'PRJ-1001',
@@ -86,19 +112,67 @@ const materials: Material[] = [
     },
 ];
 
+const materials: Material[] = readStoredData(
+    STORAGE_KEYS.materials,
+    initialMaterials,
+);
+
+const materialDrafts = new Map<string, Material>(
+    readStoredData<[string, Material][]>(
+        STORAGE_KEYS.drafts,
+        [],
+    ),
+);
+
+const classificationHistory: ClassificationHistoryEntry[] =
+    readStoredData<ClassificationHistoryEntry[]>(
+        STORAGE_KEYS.history,
+        [],
+    );
+
 const delay = (ms: number) =>
     new Promise<void>((resolve) => setTimeout(resolve, ms));
 
+function persistDrafts(): void {
+    persistData(
+        STORAGE_KEYS.drafts,
+        Array.from(materialDrafts.entries()),
+    );
+}
+
+function getMaterialChanges(
+    previous: Material,
+    next: Material,
+): ClassificationFieldChange[] {
+    const fields: ClassificationFieldChange['field'][] = [
+        'name',
+        'description',
+        'category',
+        'materialType',
+        'status',
+    ];
+
+    return fields
+        .filter((field) => previous[field] !== next[field])
+        .map((field) => ({
+            field,
+            from: String(previous[field] ?? ''),
+            to: String(next[field] ?? ''),
+        }));
+}
+
 export async function getProjects(): Promise<Project[]> {
     await delay(500);
-    return projects;
+    return projects.map((project) => ({ ...project }));
 }
 
 export async function getProjectById(
     id: string,
 ): Promise<Project | undefined> {
     await delay(300);
-    return projects.find((project) => project.id === id);
+
+    const project = projects.find((item) => item.id === id);
+    return project ? { ...project } : undefined;
 }
 
 export async function getMaterials(
@@ -108,28 +182,30 @@ export async function getMaterials(
 
     const search = filters.search?.trim().toLowerCase();
 
-    return materials.filter((material) => {
-        const matchesSearch =
-            !search ||
-            [
-                material.materialNumber,
-                material.name,
-                material.description,
-                material.category,
-            ].some((value) => value.toLowerCase().includes(search));
+    return materials
+        .filter((material) => {
+            const matchesSearch =
+                !search ||
+                [
+                    material.materialNumber,
+                    material.name,
+                    material.description,
+                    material.category,
+                ].some((value) => value.toLowerCase().includes(search));
 
-        const matchesStatus =
-            !filters.status ||
-            filters.status === 'all' ||
-            material.status === filters.status;
+            const matchesStatus =
+                !filters.status ||
+                filters.status === 'all' ||
+                material.status === filters.status;
 
-        const matchesCategory =
-            !filters.category ||
-            filters.category === 'all' ||
-            material.category === filters.category;
+            const matchesCategory =
+                !filters.category ||
+                filters.category === 'all' ||
+                material.category === filters.category;
 
-        return matchesSearch && matchesStatus && matchesCategory;
-    });
+            return matchesSearch && matchesStatus && matchesCategory;
+        })
+        .map((material) => ({ ...material }));
 }
 
 export async function getMaterialsByProjectId(
@@ -137,16 +213,18 @@ export async function getMaterialsByProjectId(
 ): Promise<Material[]> {
     await delay(300);
 
-    return materials.filter(
-        (material) => material.projectId === projectId,
-    );
+    return materials
+        .filter((material) => material.projectId === projectId)
+        .map((material) => ({ ...material }));
 }
 
 export async function getMaterialById(
     id: string,
 ): Promise<Material | undefined> {
     await delay(300);
-    return materials.find((material) => material.id === id);
+
+    const material = materials.find((item) => item.id === id);
+    return material ? { ...material } : undefined;
 }
 
 export async function updateMaterial(
@@ -161,12 +239,126 @@ export async function updateMaterial(
         throw new Error(`Material not found: ${id}`);
     }
 
-    materials[index] = {
-        ...materials[index],
+    const previousMaterial = { ...materials[index] };
+
+    const updatedMaterial: Material = {
+        ...previousMaterial,
         ...changes,
-        id: materials[index].id,
+        id: previousMaterial.id,
         updatedAt: new Date().toISOString(),
     };
 
-    return { ...materials[index] };
+    const fieldChanges = getMaterialChanges(
+        previousMaterial,
+        updatedMaterial,
+    );
+
+    materials[index] = updatedMaterial;
+    persistData(STORAGE_KEYS.materials, materials);
+
+    addClassificationHistory({
+        materialId: id,
+        action:
+            updatedMaterial.status === 'confirmed'
+                ? 'confirmed'
+                : 'updated',
+        details:
+            updatedMaterial.status === 'confirmed'
+                ? 'Classification confirmed'
+                : 'Material updated',
+        changes: fieldChanges,
+    });
+
+    return { ...updatedMaterial };
+}
+
+export async function getMaterialDrafts(
+    projectId?: string,
+): Promise<Material[]> {
+    await delay(200);
+
+    const drafts = Array.from(materialDrafts.values());
+
+    return drafts
+        .filter((draft) => !projectId || draft.projectId === projectId)
+        .map((draft) => ({ ...draft }));
+}
+
+export async function saveMaterialDraft(
+    material: Material,
+): Promise<Material> {
+    await delay(200);
+
+    const previousDraft = materialDrafts.get(material.id);
+
+    const originalMaterial = materials.find(
+        (item) => item.id === material.id,
+    );
+
+    const previousMaterial =
+        previousDraft ?? originalMaterial ?? material;
+
+    const draft: Material = {
+        ...material,
+        status: 'draft',
+        updatedAt: new Date().toISOString(),
+    };
+
+    const fieldChanges = getMaterialChanges(
+        previousMaterial,
+        draft,
+    );
+
+    materialDrafts.set(material.id, draft);
+    persistDrafts();
+
+    addClassificationHistory({
+        materialId: material.id,
+        action: previousDraft ? 'updated' : 'created',
+        details: previousDraft ? 'Draft updated' : 'Draft created',
+        changes: fieldChanges,
+    });
+
+    return { ...draft };
+}
+
+export async function deleteMaterialDraft(
+    materialId: string,
+    recordDiscard = true,
+): Promise<void> {
+    await delay(200);
+
+    const draft = materialDrafts.get(materialId);
+
+    if (draft && recordDiscard) {
+        addClassificationHistory({
+            materialId,
+            action: 'discarded',
+            details: 'Draft discarded',
+        });
+    }
+
+    materialDrafts.delete(materialId);
+    persistDrafts();
+}
+
+export async function getClassificationHistory(): Promise<
+    ClassificationHistoryEntry[]
+> {
+    await delay(200);
+
+    return [...classificationHistory].reverse();
+}
+
+export function addClassificationHistory(
+    entry: Omit<ClassificationHistoryEntry, 'id' | 'timestamp' | 'user'>,
+): void {
+    classificationHistory.push({
+        ...entry,
+        id: crypto.randomUUID(),
+        timestamp: new Date().toISOString(),
+        user: 'Current User',
+    });
+
+    persistData(STORAGE_KEYS.history, classificationHistory);
 }

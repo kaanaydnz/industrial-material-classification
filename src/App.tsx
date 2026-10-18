@@ -15,6 +15,7 @@ import {
 import Dashboard from './pages/dashboard/Dashboard';
 import Projects from './pages/projects/Projects';
 import Classification from './pages/classification/Classification';
+import Review from './pages/review/Review';
 import History from './pages/history/History';
 import { useEffect } from 'react';
 import './App.css';
@@ -93,6 +94,15 @@ function App() {
             {t('navigation.classification')}
           </IxMenuItem>
           <IxMenuItem
+            active={isActive('/review')}
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/review');
+            }}
+          >
+            {t('navigation.review')}
+          </IxMenuItem>
+          <IxMenuItem
             icon={iconHistory}
             active={isActive('/history')}
             onClick={e => {
@@ -120,6 +130,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/classification" element={<Classification />} />
+            <Route path="/review" element={<Review />} />
             <Route path="/history" element={<History />} />
             <Route path="*" element={<Dashboard />} />
           </Routes>

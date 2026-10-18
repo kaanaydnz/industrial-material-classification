@@ -6,6 +6,7 @@
         "dashboard": "Dashboard",
         "projects": "Projects",
         "classification": "Material Classification",
+        "review": "Review & Confirmation",
         "history": "Classification History"
     },
     "projects": {
@@ -74,7 +75,48 @@
             "description": "Material Description",
             "saveDraft": "Save Draft",
             "cancel": "Discard Changes",
-            "draftSaved": "Draft saved successfully."
+            "draftSaved": "Draft saved successfully.",
+            "changesDiscarded": "Unsaved changes have been discarded."
+        }
+    },
+    "review": {
+        "title": "Review & Confirmation",
+        "loading": "Loading drafts...",
+        "empty": "There are no drafts to review.",
+        "error": "The operation failed. Please try again.",
+        "materialNumber": "Material Number",
+        "category": "Category",
+        "type": "Type",
+        "confirm": "Confirm",
+        "discard": "Discard Draft",
+        "confirmSuccess": "Classification confirmed successfully.",
+        "discardSuccess": "Draft discarded successfully.",
+        "lastUpdated": "Last Updated"
+    },
+    "history": {
+        "title": "Classification History",
+        "loading": "Loading history...",
+        "empty": "No classification history available.",
+        "error": "Failed to load history. Please try again.",
+        "timestamp": "Date & Time",
+        "materialId": "Material ID",
+        "action": "Action",
+        "user": "User",
+        "details": "Details",
+        "actions": {
+            "created": "Draft Created",
+            "updated": "Updated",
+            "submitted": "Submitted",
+            "confirmed": "Confirmed",
+            "discarded": "Draft Discarded"
+        },
+        "changes": "Changes",
+        "fields": {
+            "name": "Name",
+            "description": "Description",
+            "category": "Category",
+            "materialType": "Material Type",
+            "status": "Status"
         }
     }
 }

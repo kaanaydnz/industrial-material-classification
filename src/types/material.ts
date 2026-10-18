@@ -1,4 +1,3 @@
-
 export type ClassificationStatus =
     | 'unclassified'
     | 'draft'
@@ -40,11 +39,25 @@ export interface MaterialClassification {
     description: string;
 }
 
+export type ClassificationField =
+    | 'name'
+    | 'description'
+    | 'category'
+    | 'materialType'
+    | 'status';
+
+export interface ClassificationFieldChange {
+    field: ClassificationField;
+    from: string;
+    to: string;
+}
+
 export interface ClassificationHistoryEntry {
     id: string;
     materialId: string;
-    action: 'created' | 'updated' | 'submitted' | 'confirmed';
+    action: 'created' | 'updated' | 'submitted' | 'confirmed' | 'discarded';
     timestamp: string;
     user: string;
     details: string;
+    changes?: ClassificationFieldChange[];
 }

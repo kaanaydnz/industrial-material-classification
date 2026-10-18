@@ -16,6 +16,10 @@
   padding-inline-start: 0.25rem;
 }
 
+.classificationSearch {
+  width: 80%;
+}
+
 .selectorField {
   display: flex;
   flex-direction: column;

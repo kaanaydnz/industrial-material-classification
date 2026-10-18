@@ -18,7 +18,12 @@ import {
   showToast
 } from '@siemens/ix-react';
 import type { Project } from '../../types/material';
-import { getProjects, getMaterialsByProjectId } from '../../services/mockApi';
+import {
+  getProjects,
+  getMaterialsByProjectId,
+  saveMaterialDraft,
+  getMaterialDrafts,
+} from '../../services/mockApi';
 import { useTranslation } from 'react-i18next';
 import styles from './Classification.module.css';
 import { AgGridReact } from 'ag-grid-react';
@@ -115,6 +120,7 @@ function Classification() {
   useEffect(() => {
     if (!selectedId) {
       setMaterials([]);
+      setDraftMaterials({});
       return;
     }
 
@@ -123,8 +129,25 @@ function Classification() {
       setMaterialsError(null);
 
       try {
-        const result = await getMaterialsByProjectId(selectedId);
-        setMaterials(result);
+        const [result, drafts] = await Promise.all([
+          getMaterialsByProjectId(selectedId),
+          getMaterialDrafts(selectedId),
+        ]);
+
+        const draftsByNumber: Record<string, Material> = {};
+
+        drafts.forEach((draft) => {
+          draftsByNumber[draft.materialNumber] = draft;
+        });
+
+        setDraftMaterials(draftsByNumber);
+
+        setMaterials(
+          result.map((material) => {
+            const draft = draftsByNumber[material.materialNumber];
+            return draft ?? material;
+          }),
+        );
       } catch {
         setMaterialsError(t('classification.projects.error'));
       } finally {
@@ -135,29 +158,53 @@ function Classification() {
     loadMaterials();
   }, [selectedId]);
 
-  function handleSaveDraft() {
+
+  async function handleSaveDraft() {
     if (!editingMaterial) return;
 
-    setDraftMaterials((current) => ({
-      ...current,
-      [editingMaterial.materialNumber]: { ...editingMaterial },
-    }));
+    try {
+      const savedDraft = await saveMaterialDraft(editingMaterial);
 
-    setSelectedMaterial(editingMaterial);
+      setDraftMaterials((current) => ({
+        ...current,
+        [savedDraft.materialNumber]: savedDraft,
+      }));
 
-    showToast({
-      message: t('classification.editMaterial.draftSaved'),
-      type: 'success',
-    });
+      setMaterials((current) =>
+        current.map((material) =>
+          material.id === savedDraft.id
+            ? savedDraft
+            : material,
+        ),
+      );
+
+      setSelectedMaterial(savedDraft);
+      setEditingMaterial(savedDraft);
+
+      showToast({
+        message: t('classification.editMaterial.draftSaved'),
+        type: 'success',
+      });
+    } catch {
+      showToast({
+        message: t('classification.projects.error'),
+        type: 'error',
+      });
+    }
   }
+
 
   function handleCancel() {
     if (!selectedMaterial) return;
 
     setEditingMaterial(
-      draftMaterials[selectedMaterial.materialNumber] ??
-      selectedMaterial,
+      draftMaterials[selectedMaterial.materialNumber] ?? selectedMaterial,
     );
+
+    showToast({
+      message: t('classification.editMaterial.changesDiscarded'),
+      type: 'info',
+    });
   }
 
   return (
@@ -191,6 +238,7 @@ function Classification() {
             <IxSelect
               id="project-select"
               value={selectedId}
+              className={styles.classificationSearch}
               onValueChange={(event) => {
                 const value = event.detail;
                 setSelectedId(Array.isArray(value) ? value[0] ?? '' : value);
@@ -217,9 +265,11 @@ function Classification() {
         ) : materials.length === 0 ? (
           <p>{t('classification.projects.empty')}</p>
         ) : (
-          <IxLayoutGrid noMargin style={{ "width": '100%' }}>
+          <IxLayoutGrid noMargin>
             <IxRow>
               <IxCol size="12" sizeLg="9">
+
+
                 <div className={styles.materialsGrid}>
                   <AgGridReact<Material>
                     rowData={materials}
@@ -228,10 +278,12 @@ function Classification() {
                     onRowClicked={(event) => {
                       const material = event.data;
                       if (!material) return;
-                      setSelectedMaterial(material);
-                      setEditingMaterial(
-                        draftMaterials[material.materialNumber] ?? material,
-                      );
+
+                      const draft = draftMaterials[material.materialNumber];
+                      const currentMaterial = draft ?? material;
+
+                      setSelectedMaterial(currentMaterial);
+                      setEditingMaterial(currentMaterial);
                     }}
                   />
                 </div>

@@ -6,6 +6,7 @@
         "dashboard": "Kontrol Paneli",
         "projects": "Projeler",
         "classification": "Malzeme Sınıflandırma",
+        "review": "İnceleme ve Onay",
         "history": "Sınıflandırma Geçmişi"
     },
     "projects": {
@@ -75,6 +76,47 @@
             "saveDraft": "Taslağı Kaydet",
             "cancel": "Değişiklikleri Geri Al",
             "draftSaved": "Taslak başarıyla kaydedildi."
+        }
+    },
+    "review": {
+        "title": "İnceleme ve Onay",
+        "loading": "Taslaklar yükleniyor...",
+        "empty": "İncelenecek taslak yok.",
+        "error": "İşlem başarısız oldu. Lütfen tekrar deneyin.",
+        "materialNumber": "Malzeme Numarası",
+        "category": "Kategori",
+        "type": "Tür",
+        "confirm": "Onayla",
+        "discard": "Taslağı Sil",
+        "confirmSuccess": "Sınıflandırma başarıyla onaylandı.",
+        "discardSuccess": "Taslak başarıyla silindi.",
+        "changesDiscarded": "Kaydedilmemiş değişiklikler geri alındı.",
+        "lastUpdated": "Son Güncelleme"
+    },
+    "history": {
+        "title": "Sınıflandırma Geçmişi",
+        "loading": "Geçmiş yükleniyor...",
+        "empty": "Henüz sınıflandırma geçmişi yok.",
+        "error": "Geçmiş yüklenemedi. Lütfen tekrar deneyin.",
+        "timestamp": "Tarih ve Saat",
+        "materialId": "Malzeme ID",
+        "action": "İşlem",
+        "user": "Kullanıcı",
+        "details": "Detaylar",
+        "actions": {
+            "created": "Taslak Oluşturuldu",
+            "updated": "Güncellendi",
+            "submitted": "İncelemeye Gönderildi",
+            "confirmed": "Onaylandı",
+            "discarded": "Taslak Silindi"
+        },
+        "changes": "Değişiklikler",
+        "fields": {
+            "name": "Ad",
+            "description": "Açıklama",
+            "category": "Kategori",
+            "materialType": "Malzeme Türü",
+            "status": "Durum"
         }
     }
 }

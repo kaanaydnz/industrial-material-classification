@@ -3,12 +3,21 @@
  * SPDX-License-Identifier: MIT
  */
 
-.description {
-  display: block;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+.historyPage {
+  width: 100%;
 }
 
-.gridContainer {
-  max-width: min(720px, 100%);
+.historyContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 1.5rem;
+  padding-inline-start: 0.25rem;
+}
+
+.historyGrid {
+  width: min(100%, 100rem);
+  min-width: 0;
+  height: clamp(320px, 60vh, 650px);
 }

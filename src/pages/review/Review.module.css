@@ -1,0 +1,109 @@
+/*
+ * Copyright (c) Siemens 2018 - 2026
+ * SPDX-License-Identifier: MIT
+ */
+
+.reviewPage {
+    width: 100%;
+}
+
+.reviewContent {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    margin-top: 1.5rem;
+    padding-inline-start: 0.25rem;
+}
+
+.reviewMessage {
+    margin-bottom: 0.5rem;
+}
+
+.draftsList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: min(100%, 100rem);
+}
+
+.draftCard {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    box-sizing: border-box;
+}
+
+.draftCardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+    padding: 1rem;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
+}
+
+.draftHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+}
+
+.draftHeader h3 {
+    margin: 0;
+}
+
+.materialNumber {
+    color: var(--theme-color-soft-text);
+    font-size: 0.875rem;
+}
+
+.draftDetails {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.detailField {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    min-width: 0;
+}
+
+.detailLabel {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--theme-color-soft-text);
+}
+
+.detailValue {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.draftDescription {
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--theme-color-soft-bdr);
+}
+
+.draftActions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+@media (max-width: 640px) {
+    .draftDetails {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .draftActions {
+        justify-content: flex-start;
+    }
+}
