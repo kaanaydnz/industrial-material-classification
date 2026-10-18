@@ -11,9 +11,8 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.5rem;
+  gap: 1rem;
   width: 100%;
-  max-width: 400px;
   margin-top: 1.5rem;
   padding-inline-start: 0.25rem;
 }
@@ -29,4 +28,10 @@
 
 .retryButton {
   margin-inline-start: 0.5rem;
+}
+
+.materialsGrid {
+  width: min(100%, 100rem);
+  min-width: 0;
+  height: clamp(280px, 55vh, 600px);
 }

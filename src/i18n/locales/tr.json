@@ -10,19 +10,12 @@
     },
     "projects": {
         "title": "Projeler",
-        "materials": "Malzemeler",
-        "searchPlaceholder": "Malzeme ara...",
-        "loading": "Malzemeler yükleniyor...",
+        "searchPlaceholder": "Proje ara...",
+        "loading": "Projeler yükleniyor...",
         "searching": "Aranıyor...",
-        "empty": "Malzeme bulunamadı.",
-        "error": "Malzemeler yüklenemedi. Lütfen tekrar deneyin.",
+        "empty": "Proje bulunamadı.",
+        "error": "Projeler yüklenemedi. Lütfen tekrar deneyin.",
         "retry": "Tekrar dene",
-        "materialNumber": "Malzeme Numarası",
-        "name": "Ad",
-        "category": "Kategori",
-        "materialType": "Malzeme Türü",
-        "status": "Durum",
-        "updatedAt": "Son Güncelleme",
         "columns": {
             "projectNumber": "Proje Numarası",
             "projectName": "Proje Adı",
@@ -55,10 +48,21 @@
     },
     "classification": {
         "title": "Malzeme Sınıflandırma Çalışma Alanı",
-        "loading": "Malzemeler yükleniyor...",
-        "empty": "Sınıflandırma için kullanılabilir malzeme bulunamadı.",
-        "error": "Malzemeler yüklenemedi. Lütfen tekrar deneyin.",
-        "retry": "Tekrar Dene",
-        "selectMaterial": "Malzeme seçin"
+        "projects": {
+            "loading": "Projeler yükleniyor...",
+            "empty": "Sınıflandırma için kullanılabilir proje bulunamadı.",
+            "error": "Projeler yüklenemedi. Lütfen tekrar deneyin.",
+            "retry": "Tekrar Dene",
+            "select": "Proje seçin"
+        },
+        "materials": {
+            "number": "Malzeme Numarası",
+            "name": "Ad",
+            "description": "Açıklama",
+            "category": "Kategori",
+            "type": "Tür",
+            "status": "Durum",
+            "updatedAt": "Son Güncelleme"
+        }
     }
 }

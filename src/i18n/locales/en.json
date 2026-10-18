@@ -10,19 +10,12 @@
     },
     "projects": {
         "title": "Projects",
-        "materials": "Materials",
-        "searchPlaceholder": "Search materials...",
-        "loading": "Loading materials...",
+        "searchPlaceholder": "Search projects...",
+        "loading": "Loading projects...",
         "searching": "Searching...",
-        "empty": "No materials found.",
-        "error": "Failed to load materials. Please try again.",
+        "empty": "No projects found.",
+        "error": "Failed to load projects. Please try again.",
         "retry": "Retry",
-        "materialNumber": "Material Number",
-        "name": "Name",
-        "category": "Category",
-        "materialType": "Material Type",
-        "status": "Status",
-        "updatedAt": "Last Updated",
         "columns": {
             "projectNumber": "Project Number",
             "projectName": "Project Name",
@@ -55,10 +48,21 @@
     },
     "classification": {
         "title": "Material Classification Workspace",
-        "loading": "Loading materials...",
-        "empty": "No materials available for classification.",
-        "error": "Failed to load materials. Please try again.",
-        "retry": "Retry",
-        "selectMaterial": "Select a material"
+        "projects": {
+            "loading": "Loading projects...",
+            "empty": "No projects available for classification.",
+            "error": "Failed to load projects. Please try again.",
+            "retry": "Retry",
+            "select": "Select a project"
+        },
+        "materials": {
+            "number": "Material Number",
+            "name": "Name",
+            "description": "Description",
+            "category": "Category",
+            "type": "Type",
+            "status": "Status",
+            "updatedAt": "Updated At"
+        }
     }
 }
