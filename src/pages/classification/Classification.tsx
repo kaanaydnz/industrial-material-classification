@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   IxContentHeader,
   IxSelect,
@@ -23,6 +23,7 @@ import {
   getMaterialsByProjectId,
   saveMaterialDraft,
   getMaterialDrafts,
+  deleteMaterialDraft,
 } from '../../services/mockApi';
 import { useTranslation } from 'react-i18next';
 import styles from './Classification.module.css';
@@ -49,6 +50,10 @@ function Classification() {
   const [draftMaterials, setDraftMaterials] = useState<Record<string, Material>>({});
   const [isLoadingMaterials, setIsLoadingMaterials] = useState(false);
   const [materialsError, setMaterialsError] = useState<string | null>(null);
+  const saveVersion = useRef(0);
+  const [saveStatus, setSaveStatus] = useState<
+    'idle' | 'saving' | 'saved' | 'error'
+  >('idle');
   const columnDefs: ColDef<Material>[] = [
     {
       field: 'materialNumber',
@@ -143,12 +148,7 @@ function Classification() {
 
         setDraftMaterials(draftsByNumber);
 
-        setMaterials(
-          result.map((material) => {
-            const draft = draftsByNumber[material.materialNumber];
-            return draft ?? material;
-          }),
-        );
+        setMaterials(result);
       } catch {
         setMaterialsError(t('classification.projects.error'));
       } finally {
@@ -159,6 +159,47 @@ function Classification() {
     loadMaterials();
   }, [selectedId]);
 
+  useEffect(() => {
+    if (!editingMaterial || !selectedMaterial) return;
+
+    const version = saveVersion.current;
+
+    const hasChanges =
+      JSON.stringify(editingMaterial) !==
+      JSON.stringify(selectedMaterial);
+
+    if (!hasChanges) {
+      setSaveStatus('idle');
+      return;
+    }
+
+    setSaveStatus('saving');
+
+    const materialToSave = { ...editingMaterial };
+
+    const timeoutId = window.setTimeout(async () => {
+      try {
+        const savedDraft = await saveMaterialDraft(materialToSave);
+
+        if (version !== saveVersion.current) return;
+
+        setDraftMaterials((current) => ({
+          ...current,
+          [savedDraft.materialNumber]: savedDraft,
+        }));
+
+        setSelectedMaterial(savedDraft);
+        setEditingMaterial(savedDraft);
+        setSaveStatus('saved');
+      } catch {
+        if (version === saveVersion.current) {
+          setSaveStatus('error');
+        }
+      }
+    }, 1000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [editingMaterial, selectedMaterial]);
 
   async function handleSaveDraft() {
     if (!editingMaterial) return;
@@ -170,14 +211,6 @@ function Classification() {
         ...current,
         [savedDraft.materialNumber]: savedDraft,
       }));
-
-      setMaterials((current) =>
-        current.map((material) =>
-          material.id === savedDraft.id
-            ? savedDraft
-            : material,
-        ),
-      );
 
       setSelectedMaterial(savedDraft);
       setEditingMaterial(savedDraft);
@@ -194,17 +227,44 @@ function Classification() {
     }
   }
 
-  function handleCancel() {
+  async function handleCancel() {
     if (!selectedMaterial) return;
 
-    setEditingMaterial(
-      draftMaterials[selectedMaterial.materialNumber] ?? selectedMaterial,
-    );
+    const materialId = selectedMaterial.id;
+    const materialNumber = selectedMaterial.materialNumber;
 
-    showToast({
-      message: t('classification.editMaterial.changesDiscarded'),
-      type: 'info',
-    });
+    // Bekleyen veya devam eden eski autosave işlemlerini geçersiz kıl.
+    saveVersion.current += 1;
+
+    try {
+      await deleteMaterialDraft(materialId);
+
+      const originalMaterial = materials.find(
+        (material) => material.id === materialId,
+      );
+
+      if (!originalMaterial) return;
+
+      setDraftMaterials((current) => {
+        const updated = { ...current };
+        delete updated[materialNumber];
+        return updated;
+      });
+
+      setSelectedMaterial(originalMaterial);
+      setEditingMaterial(originalMaterial);
+      setSaveStatus('idle');
+
+      showToast({
+        message: t('classification.editMaterial.changesDiscarded'),
+        type: 'info',
+      });
+    } catch {
+      showToast({
+        message: t('classification.projects.error'),
+        type: 'error',
+      });
+    }
   }
 
   async function handleExportExcel() {
@@ -361,7 +421,10 @@ function Classification() {
 
                 <div className={styles.materialsGrid}>
                   <AgGridReact<Material>
-                    rowData={materials}
+                    rowData={materials.map(
+                      (material) =>
+                        draftMaterials[material.materialNumber] ?? material,
+                    )}
                     columnDefs={columnDefs}
                     theme={ixTheme}
                     onRowClicked={(event) => {
@@ -380,6 +443,12 @@ function Classification() {
               <IxCol size="12" sizeLg="3">
                 <section className={styles.editor}>
                   <h3>{t('classification.editMaterial.title')}</h3>
+
+                  <p aria-live="polite">
+                    {saveStatus === 'saving' && 'Saving draft…'}
+                    {saveStatus === 'saved' && 'All changes saved'}
+                    {saveStatus === 'error' && 'Could not save changes'}
+                  </p>
 
                   {selectedMaterial ? (
                     <>
