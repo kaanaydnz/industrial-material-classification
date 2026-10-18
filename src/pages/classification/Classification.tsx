@@ -15,6 +15,7 @@ import {
   IxRow,
   IxInput,
   IxTextarea,
+  showToast
 } from '@siemens/ix-react';
 import type { Project } from '../../types/material';
 import { getProjects, getMaterialsByProjectId } from '../../services/mockApi';
@@ -38,6 +39,8 @@ function Classification() {
   const [error, setError] = useState<string | null>(null);
   const [materials, setMaterials] = useState<Material[]>([]);
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
+  const [editingMaterial, setEditingMaterial] = useState<Material | null>(null);
+  const [draftMaterials, setDraftMaterials] = useState<Record<string, Material>>({});
   const [isLoadingMaterials, setIsLoadingMaterials] = useState(false);
   const [materialsError, setMaterialsError] = useState<string | null>(null);
   const columnDefs: ColDef<Material>[] = [
@@ -132,6 +135,31 @@ function Classification() {
     loadMaterials();
   }, [selectedId]);
 
+  function handleSaveDraft() {
+    if (!editingMaterial) return;
+
+    setDraftMaterials((current) => ({
+      ...current,
+      [editingMaterial.materialNumber]: { ...editingMaterial },
+    }));
+
+    setSelectedMaterial(editingMaterial);
+
+    showToast({
+      message: t('classification.editMaterial.draftSaved'),
+      type: 'success',
+    });
+  }
+
+  function handleCancel() {
+    if (!selectedMaterial) return;
+
+    setEditingMaterial(
+      draftMaterials[selectedMaterial.materialNumber] ??
+      selectedMaterial,
+    );
+  }
+
   return (
     <div className={styles.classificationPage}>
       <div className={styles.pageHeader}>
@@ -198,7 +226,12 @@ function Classification() {
                     columnDefs={columnDefs}
                     theme={ixTheme}
                     onRowClicked={(event) => {
-                      setSelectedMaterial(event.data ?? null);
+                      const material = event.data;
+                      if (!material) return;
+                      setSelectedMaterial(material);
+                      setEditingMaterial(
+                        draftMaterials[material.materialNumber] ?? material,
+                      );
                     }}
                   />
                 </div>
@@ -220,41 +253,72 @@ function Classification() {
                       <div className={styles.formField}>
                         <label>{t('classification.editMaterial.name')}</label>
                         <IxInput
-                          value={selectedMaterial.name}
+                          value={editingMaterial?.name ?? ''}
                           aria-label={t('classification.editMaterial.name')}
+                          onValueChange={(event) => {
+                            setEditingMaterial((current) =>
+                              current
+                                ? { ...current, name: event.detail }
+                                : current,
+                            );
+                          }}
                         />
                       </div>
 
                       <div className={styles.formField}>
                         <label>{t('classification.editMaterial.category')}</label>
                         <IxInput
-                          value={selectedMaterial.category}
+                          value={editingMaterial?.category ?? ''}
                           aria-label={t('classification.editMaterial.category')}
+                          onValueChange={(event) => {
+                            setEditingMaterial((current) =>
+                              current
+                                ? { ...current, category: event.detail }
+                                : current,
+                            );
+                          }}
                         />
                       </div>
 
                       <div className={styles.formField}>
                         <label>{t('classification.editMaterial.type')}</label>
                         <IxInput
-                          value={selectedMaterial.materialType}
+                          value={editingMaterial?.materialType ?? ''}
                           aria-label={t('classification.editMaterial.type')}
+                          onValueChange={(event) => {
+                            setEditingMaterial((current) =>
+                              current
+                                ? { ...current, materialType: event.detail }
+                                : current,
+                            );
+                          }}
                         />
                       </div>
 
                       <div className={styles.formField}>
                         <label>{t('classification.editMaterial.description')}</label>
                         <IxTextarea
-                          value={selectedMaterial.description}
+                          value={editingMaterial?.description ?? ''}
                           aria-label={t('classification.editMaterial.description')}
+                          onValueChange={(event) => {
+                            setEditingMaterial((current) =>
+                              current
+                                ? { ...current, description: event.detail }
+                                : current,
+                            );
+                          }}
                         />
                       </div>
 
                       <div className={styles.editorActions}>
-                        <IxButton variant="secondary">
+                        <IxButton
+                          variant="secondary"
+                          onClick={handleCancel}
+                        >
                           {t('classification.editMaterial.cancel')}
                         </IxButton>
 
-                        <IxButton>
+                        <IxButton onClick={handleSaveDraft}>
                           {t('classification.editMaterial.saveDraft')}
                         </IxButton>
                       </div>

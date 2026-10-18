@@ -73,7 +73,8 @@
             "type": "Material Type",
             "description": "Material Description",
             "saveDraft": "Save Draft",
-            "cancel": "Cancel"
+            "cancel": "Discard Changes",
+            "draftSaved": "Draft saved successfully."
         }
     }
 }

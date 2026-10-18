@@ -73,7 +73,8 @@
             "type": "Malzeme Türü",
             "description": "Malzeme Açıklaması",
             "saveDraft": "Taslağı Kaydet",
-            "cancel": "İptal"
+            "cancel": "Değişiklikleri Geri Al",
+            "draftSaved": "Taslak başarıyla kaydedildi."
         }
     }
 }
