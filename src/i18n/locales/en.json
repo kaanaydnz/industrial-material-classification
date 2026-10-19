@@ -58,7 +58,8 @@
         "statuses": {
             "active": "Active",
             "completed": "Completed",
-            "draft": "Draft"
+            "draft": "Draft",
+            "archived": "Archived"
         },
         "statusValues": {
             "unclassified": "Unclassified",

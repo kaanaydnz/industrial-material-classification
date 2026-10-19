@@ -2,7 +2,6 @@
 export type ClassificationStatus =
     | 'unclassified'
     | 'draft'
-    | 'in-review'
     | 'confirmed';
 
 export interface Project {

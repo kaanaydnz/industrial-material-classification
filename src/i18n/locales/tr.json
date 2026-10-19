@@ -58,7 +58,8 @@
         "statuses": {
             "active": "Aktif",
             "completed": "Tamamlandı",
-            "draft": "Taslak"
+            "draft": "Taslak",
+            "archived": "Arşivlendi"
         },
         "statusValues": {
             "unclassified": "Sınıflandırılmadı",

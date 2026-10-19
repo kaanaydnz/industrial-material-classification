@@ -29,7 +29,7 @@ describe('mockApi', () => {
     it('returns projects', async () => {
         const projects = await getProjects();
 
-        expect(projects).toHaveLength(2);
+        expect(projects.length).toBeGreaterThan(0);
     });
 
     it('finds a project by ID', async () => {

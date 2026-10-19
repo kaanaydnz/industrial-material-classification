@@ -43,14 +43,12 @@ type PillVariant = 'neutral' | 'warning' | 'info' | 'success';
 
 const STATUS_ORDER: ClassificationStatus[] = [
   'confirmed',
-  'in-review',
   'draft',
   'unclassified',
 ];
 
 const STATUS_PILL: Record<ClassificationStatus, PillVariant> = {
   confirmed: 'success',
-  'in-review': 'info',
   draft: 'warning',
   unclassified: 'neutral',
 };
@@ -146,7 +144,6 @@ function Dashboard() {
   const statusCounts = useMemo(() => {
     const counts: Record<ClassificationStatus, number> = {
       confirmed: 0,
-      'in-review': 0,
       draft: 0,
       unclassified: 0,
     };
