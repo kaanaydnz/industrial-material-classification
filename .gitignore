@@ -44,3 +44,9 @@ yarn-error.log*
 
 # System files
 Thumbs.db
+
+# env
+.env
+
+# macos archive leftover
+__MACOSX/
