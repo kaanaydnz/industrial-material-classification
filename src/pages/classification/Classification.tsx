@@ -10,6 +10,7 @@ import {
   IxCol,
   IxRow,
   IxInput,
+  IxIcon,
   IxTextarea,
   showToast
 } from '@siemens/ix-react';
@@ -28,6 +29,10 @@ import type { ColDef } from 'ag-grid-community';
 import type { Material } from '../../types/material';
 import { getIxTheme } from '@siemens/ix-aggrid';
 import * as agGrid from 'ag-grid-community';
+import {
+  iconExport,
+} from '@siemens/ix-icons/icons';
+
 import ExcelJS from 'exceljs';
 
 const ixTheme = getIxTheme(agGrid, {
@@ -393,6 +398,10 @@ function Classification() {
             </IxSelect>
             <div className={styles.materialsToolbar}>
               <IxButton onClick={handleExportExcel}>
+                <IxIcon
+                  className={styles.exportIcon}
+                  name={iconExport}
+                ></IxIcon>
                 {t('classification.exportExcel')}
               </IxButton>
             </div>

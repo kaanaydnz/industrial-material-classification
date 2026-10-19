@@ -9,6 +9,37 @@
         "review": "İnceleme ve Onay",
         "history": "Sınıflandırma Geçmişi"
     },
+    "dashboard": {
+        "title": "Kontrol Paneli",
+        "totalProjects": "Toplam Projeler",
+        "materials": "Malzemeler",
+        "drafts": "Taslaklar",
+        "history": "Geçmiş",
+        "loadError": "Kontrol paneli verileri yüklenemedi.",
+        "loading": "Kontrol paneli yükleniyor...",
+        "viewAll": "Tümünü gör",
+        "kpiHints": {
+            "activeProjects": "{{value}} aktif",
+            "unclassified": "{{value}} sınıflandırılmamış",
+            "awaitingConfirmation": "Onay bekliyor",
+            "totalLogs": "Tüm sistem aktiviteleri"
+        },
+        "statusDistribution": {
+            "title": "Sınıflandırma Durumu",
+            "empty": "Henüz malzeme yok."
+        },
+        "categories": {
+            "title": "Kategoriye Göre Malzemeler",
+            "empty": "Henüz kategori yok."
+        },
+        "projectProgress": {
+            "title": "Proje İlerlemesi"
+        },
+        "recentActivity": {
+            "title": "Son Etkinlikler",
+            "empty": "Son etkinlik yok."
+        }
+    },
     "projects": {
         "title": "Projeler",
         "searchPlaceholder": "Proje ara...",

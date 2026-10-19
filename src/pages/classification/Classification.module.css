@@ -1,4 +1,3 @@
-
 .classificationPage {
   width: 100%;
 }
@@ -85,4 +84,12 @@
   .classificationContent ix-col+ix-col {
     padding-inline-start: 1.5rem;
   }
+}
+
+.exportIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline-end: 0.5rem;
+  vertical-align: middle;
 }

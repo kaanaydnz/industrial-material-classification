@@ -9,6 +9,37 @@
         "review": "Review & Confirmation",
         "history": "Classification History"
     },
+    "dashboard": {
+        "title": "Dashboard",
+        "totalProjects": "Total Projects",
+        "materials": "Materials",
+        "drafts": "Drafts",
+        "history": "History",
+        "loadError": "Dashboard data could not be loaded.",
+        "loading": "Loading dashboard...",
+        "viewAll": "View all",
+        "kpiHints": {
+            "activeProjects": "{{value}} active",
+            "unclassified": "{{value}} unclassified",
+            "awaitingConfirmation": "Awaiting confirmation",
+            "totalLogs": "All system activities"
+        },
+        "statusDistribution": {
+            "title": "Classification Status",
+            "empty": "No materials available yet."
+        },
+        "categories": {
+            "title": "Materials by Category",
+            "empty": "No categories available yet."
+        },
+        "projectProgress": {
+            "title": "Project Progress"
+        },
+        "recentActivity": {
+            "title": "Recent Activity",
+            "empty": "No recent activity."
+        }
+    },
     "projects": {
         "title": "Projects",
         "searchPlaceholder": "Search projects...",
